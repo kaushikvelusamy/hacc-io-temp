@@ -1,0 +1,119 @@
+set(BLOSC_Sources
+    blosc/blosc.c
+    blosc/blosclz.c
+    blosc/shuffle.c
+    blosc/bitshuffle-generic.c
+    blosc/shuffle-generic.c
+    blosc/internal-complibs/zlib-1.2.8/gzwrite.c
+    blosc/internal-complibs/zlib-1.2.8/crc32.c
+    blosc/internal-complibs/zlib-1.2.8/inffast.c
+    blosc/internal-complibs/zlib-1.2.8/zutil.c
+    blosc/internal-complibs/zlib-1.2.8/infback.c
+    blosc/internal-complibs/zlib-1.2.8/deflate.c
+    blosc/internal-complibs/zlib-1.2.8/inflate.c
+    blosc/internal-complibs/zlib-1.2.8/gzread.c
+    blosc/internal-complibs/zlib-1.2.8/gzlib.c
+    blosc/internal-complibs/zlib-1.2.8/gzclose.c
+    blosc/internal-complibs/zlib-1.2.8/uncompr.c
+    blosc/internal-complibs/zlib-1.2.8/compress.c
+    blosc/internal-complibs/zlib-1.2.8/inftrees.c
+    blosc/internal-complibs/zlib-1.2.8/trees.c
+    blosc/internal-complibs/zlib-1.2.8/adler32.c
+    blosc/internal-complibs/lz4-1.7.2/lz4.c
+    blosc/internal-complibs/lz4-1.7.2/lz4hc.c
+    blosc/internal-complibs/zstd-0.7.4/legacy/zstd_v01.c
+    blosc/internal-complibs/zstd-0.7.4/legacy/zstd_v02.c
+    blosc/internal-complibs/zstd-0.7.4/legacy/zstd_v03.c
+    blosc/internal-complibs/zstd-0.7.4/legacy/zstd_v06.c
+    blosc/internal-complibs/zstd-0.7.4/legacy/zstd_v04.c
+    blosc/internal-complibs/zstd-0.7.4/legacy/zstd_v05.c
+    blosc/internal-complibs/zstd-0.7.4/compress/fse_compress.c
+    blosc/internal-complibs/zstd-0.7.4/compress/zstd_compress.c
+    blosc/internal-complibs/zstd-0.7.4/compress/huf_compress.c
+    blosc/internal-complibs/zstd-0.7.4/compress/zbuff_compress.c
+    blosc/internal-complibs/zstd-0.7.4/common/entropy_common.c
+    blosc/internal-complibs/zstd-0.7.4/common/xxhash.c
+    blosc/internal-complibs/zstd-0.7.4/common/zstd_common.c
+    blosc/internal-complibs/zstd-0.7.4/common/fse_decompress.c
+    blosc/internal-complibs/zstd-0.7.4/dictBuilder/zdict.c
+    blosc/internal-complibs/zstd-0.7.4/dictBuilder/divsufsort.c
+    blosc/internal-complibs/zstd-0.7.4/decompress/zstd_decompress.c
+    blosc/internal-complibs/zstd-0.7.4/decompress/huf_decompress.c
+    blosc/internal-complibs/zstd-0.7.4/decompress/zbuff_decompress.c
+    blosc/internal-complibs/snappy-1.1.1/snappy-c.cxx
+    blosc/internal-complibs/snappy-1.1.1/snappy.cxx
+    blosc/internal-complibs/snappy-1.1.1/snappy-sinksource.cxx
+    blosc/internal-complibs/snappy-1.1.1/snappy-stubs-internal.cxx
+    SZ/sz/src/ByteToolkit.c
+    SZ/sz/src/dataCompression.c
+    SZ/sz/src/DynamicIntArray.c
+    SZ/sz/src/iniparser.c
+    SZ/sz/src/CompressElement.c
+    SZ/sz/src/DynamicByteArray.c
+    SZ/sz/src/rw.c
+    SZ/sz/src/TightDataPointStorageI.c
+    SZ/sz/src/TightDataPointStorageD.c
+    SZ/sz/src/TightDataPointStorageF.c
+    SZ/sz/src/conf.c
+    SZ/sz/src/DynamicDoubleArray.c
+    SZ/sz/src/TypeManager.c
+    SZ/sz/src/dictionary.c
+    SZ/sz/src/DynamicFloatArray.c
+    SZ/sz/src/VarSet.c
+    SZ/sz/src/callZlib.c
+    SZ/sz/src/Huffman.c
+    SZ/sz/src/sz_float.c
+    SZ/sz/src/sz_double.c
+    SZ/sz/src/sz_int8.c
+    SZ/sz/src/sz_int16.c
+    SZ/sz/src/sz_int32.c
+    SZ/sz/src/sz_int64.c
+    SZ/sz/src/sz_uint8.c
+    SZ/sz/src/sz_uint16.c
+    SZ/sz/src/sz_uint32.c
+    SZ/sz/src/sz_uint64.c
+    SZ/sz/src/szd_uint8.c
+    SZ/sz/src/szd_uint16.c
+    SZ/sz/src/szd_uint32.c
+    SZ/sz/src/szd_uint64.c
+    SZ/sz/src/szd_float.c
+    SZ/sz/src/szd_double.c
+    SZ/sz/src/szd_int8.c
+    SZ/sz/src/szd_int16.c
+    SZ/sz/src/szd_int32.c
+    SZ/sz/src/szd_int64.c
+    SZ/sz/src/utility.c
+    SZ/sz/src/sz.c
+    SZ/sz/src/sz_float_pwr.c
+    SZ/sz/src/sz_double_pwr.c
+    SZ/sz/src/szd_float_pwr.c
+    SZ/sz/src/szd_double_pwr.c
+    SZ/sz/src/sz_double_ts.c
+    SZ/sz/src/sz_float_ts.c
+    SZ/sz/src/szd_double_ts.c
+    SZ/sz/src/szd_float_ts.c
+)
+set(BLOSC_include_dirs
+    blosc
+    SZ/sz/include
+    blosc/internal-complibs/zlib-1.2.8
+    blosc/internal-complibs/lz4-1.7.2
+    blosc/internal-complibs/snappy-1.1.1
+    blosc/internal-complibs/zstd-0.7.4
+    blosc/internal-complibs/zstd-0.7.4/legacy
+    blosc/internal-complibs/zstd-0.7.4/compress
+    blosc/internal-complibs/zstd-0.7.4/common
+    blosc/internal-complibs/zstd-0.7.4/dictBuilder
+    blosc/internal-complibs/zstd-0.7.4/decompress
+)
+add_library(blosc STATIC ${BLOSC_Sources})
+set_property(TARGET blosc PROPERTY C_STANDARD 99)
+target_include_directories(blosc PRIVATE ${BLOSC_include_dirs})
+target_include_directories(blosc INTERFACE 
+    blosc
+    SZ/sz/include
+    )
+target_compile_definitions(blosc PRIVATE HAVE_LZ4 HAVE_SNAPPY HAVE_ZLIB HAVE_ZSTD HAVE_UNISTD_H)
+if(OpenMP_FOUND)
+    target_link_libraries(blosc PRIVATE OpenMP::OpenMP_C OpenMP::OpenMP_CXX)
+endif()

@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/libgenericio.a CMakeFiles/genericio.dir/GenericIO.cxx.o
+/usr/bin/ranlib lib/libgenericio.a
