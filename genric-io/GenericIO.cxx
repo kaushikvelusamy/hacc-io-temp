@@ -99,8 +99,8 @@ void GenericFileIO_MPI::open(const std::string &FN, bool ForReading, bool MustEx
 }
 
 void GenericFileIO_MPI::setSize(size_t sz) {
-  // if (MPI_File_set_size(FH, sz) != MPI_SUCCESS)
-  //   throw runtime_error("Unable to set size for file: " + FileName);
+  if (MPI_File_set_size(FH, sz) != MPI_SUCCESS)
+    throw runtime_error("Unable to set size for file: " + FileName);
 }
 
 void GenericFileIO_MPI::read(void *buf, size_t count, off_t offset,
@@ -222,6 +222,7 @@ void GenericFileIO_POSIX::read(void *buf, size_t count, off_t offset,
     offset += scount;
   }
 }
+//       FH.get()->write(Data, WriteSize, Offset, Vars[i].Name);
 
 void GenericFileIO_POSIX::write(const void *buf, size_t count, off_t offset,
                                 const std::string &D) {
@@ -809,7 +810,7 @@ nocomp:
     setFH(MPI_COMM_SELF);
 
     FH.get()->open(LocalFileName, false, Rank0CreateAll && NRanks>1);
-    FH.get()->setSize(FileSize);
+    // FH.get()->setSize(FileSize);
     FH.get()->write(&Header[0], HeaderSize, 0, "header");
 
     close();
@@ -831,6 +832,10 @@ nocomp:
   FH.get()->open(LocalFileName, false, true);
 
   uint64_t Offset = RHLocal.Start;
+
+
+  double pure_io_StartTime = MPI_Wtime();
+
   for (size_t i = 0; i < Vars.size(); ++i) {
     uint64_t WriteSize = NeedsBlockHeaders ?
                          LocalBlockHeaders[i].Size : NElems*Vars[i].Size;
@@ -863,13 +868,19 @@ nocomp:
     Offset += WriteSize + CRCSize;
   }
 
+  
   close();
   MPI_Barrier(Comm);
+  double pure_io_EndTime = MPI_Wtime();
+  double pure_io_TotalTime = pure_io_EndTime - pure_io_StartTime;
 
   double EndTime = MPI_Wtime();
   double TotalTime = EndTime - StartTime;
-  double MaxTotalTime;
+  double MaxTotalTime, pure_io_MaxTotalTime;
+
   MPI_Reduce(&TotalTime, &MaxTotalTime, 1, MPI_DOUBLE, MPI_MAX, 0, Comm);
+
+  MPI_Reduce(&pure_io_TotalTime, &pure_io_MaxTotalTime, 1, MPI_DOUBLE, MPI_MAX, 0, Comm);
 
   if (SplitNRanks != NRanks) {
     uint64_t ContribFileSize = (SplitRank == 0) ? FileSize : 0;
@@ -881,6 +892,11 @@ nocomp:
     std::cout << "Wrote " << Vars.size() << " variables to " << FileName <<
                   " (" << FileSize << " bytes) in " << MaxTotalTime << "s: " <<
                   Rate << " MB/s" << std::endl;
+
+    double pure_io_Rate = ((double) FileSize) / pure_io_MaxTotalTime / (1024.*1024.);
+    std::cout << "Wrote pure_io_" << Vars.size() << " variables to " << FileName <<
+                  " (" << FileSize << " bytes) in " << pure_io_MaxTotalTime << "s: " <<
+                  pure_io_Rate << " MB/s" << std::endl;
   }
 
   MPI_Comm_free(&SplitComm);

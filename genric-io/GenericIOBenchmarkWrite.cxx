@@ -101,14 +101,10 @@ int main(int argc, char *argv[]) {
   bool UseAOS = false;
   bool UseLC = false;
   int a = 1;
-  size_t RecordSize = sizeof(ID_T) + sizeof(MASK_T);
   if (argc > 1 && string(argv[a]) == "-a") {
     UseAOS = true;
     --argc;
     ++a;
-    RecordSize += 2*sizeof(pos_t);
-  } else {
-    RecordSize += 7*sizeof(POSVEL_T);
   }
 
   if (argc > 1 && string(argv[a]) == "-c") {
@@ -125,34 +121,21 @@ int main(int argc, char *argv[]) {
 
 
   if(argc != 4) {
-    fprintf(stderr,"USAGE: %s [-a] [-c] [-l] <mpiisoName> <MB_per_rank> <seed>\n", argv[0]);
+    fprintf(stderr,"USAGE: %s [-a] [-c] [-l] <mpiioName> <NP> <seed>\n", argv[0]);
     exit(-1);
   }
 
   GenericIO::setNaturalDefaultPartition();
 
   char *mpiioName = argv[a++];
-  double MB_per_rank = atof(argv[a++]);
+  size_t Np = atol(argv[a++])/commRanks;
   int seed = atoi(argv[a++]);
 
-  size_t Np = (size_t)(MB_per_rank*1.e6/RecordSize);
-  
   srand48(seed + commRank);
 
   // Add a 2% variance to make things a bit more realistic.
   Np = double(Np)*(1.0 + (drand48() - 0.5)*0.02);
 
-  size_t NpTotal=0;
-  MPI_Reduce(&Np, &NpTotal, 1, MPI_UNSIGNED_LONG, MPI_SUM, 0, MPI_COMM_WORLD);
-
-  if(commRank==0) {
-    printf("RecordSize = %ld\n",RecordSize);
-    printf("NpTotal = %ld (%f million particles)\n",NpTotal,NpTotal*1.e-6);
-    printf("%ld bytes uncompressed data (%f MB)\n",RecordSize*NpTotal,RecordSize*NpTotal*1.e-6);
-    printf("\n");
-    fflush(stdout);
-  }
-  
   vector<POSVEL_T> xx, yy, zz, vx, vy, vz, phi;
   vector<ID_T> id;
   vector<MASK_T> mask;
